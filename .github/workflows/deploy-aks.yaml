@@ -1,77 +1,77 @@
-name: Deploy AKS e Sock-Shop
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-env:
-  TERRAFORM_DIR: '.'
-  HELM_CHART_DIR: './microservices-demo/deploy/kubernetes/helm-chart'
-  CLUSTER_NAME: 'aks-desafio-aquarela'
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
-        with:
-          submodules: 'true'
-
-      - name: Login no Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.1.2
-
-      - name: Terraform Init
-        run: terraform init
-        working-directory: ${{ env.TERRAFORM_DIR }}
-        env:
-          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          TF_VAR_resource_group_name: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
-
-      - name: Terraform Plan
-        run: terraform plan
-        working-directory: ${{ env.TERRAFORM_DIR }}
-        env:
-          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          TF_VAR_resource_group_name: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
-
-#      - name: Terraform Apply
-#        run: terraform apply -auto-approve
+#name: Deploy AKS e Sock-Shop
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#  workflow_dispatch:
+#
+#env:
+#  TERRAFORM_DIR: '.'
+#  HELM_CHART_DIR: './microservices-demo/deploy/kubernetes/helm-chart'
+#  CLUSTER_NAME: 'aks-desafio-aquarela'
+#
+#jobs:
+#  deploy:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout do código
+#        uses: actions/checkout@v3
+#        with:
+#          submodules: 'true'
+#
+#      - name: Login no Azure
+#        uses: azure/login@v1
+#        with:
+#          creds: ${{ secrets.AZURE_CREDENTIALS }}
+#
+#      - name: Setup Terraform
+#        uses: hashicorp/setup-terraform@v2
+#        with:
+#          terraform_version: 1.1.2
+#
+#      - name: Terraform Init
+#        run: terraform init
 #        working-directory: ${{ env.TERRAFORM_DIR }}
 #        env:
 #          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 #          TF_VAR_resource_group_name: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
 #
-#      - name: Obter credenciais do AKS
-#        run: |
-#          az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --name ${{ env.CLUSTER_NAME }} --admin
-#          echo "Kubeconfig configurado para o cluster ${{ env.CLUSTER_NAME }}"
+#      - name: Terraform Plan
+#        run: terraform plan
+#        working-directory: ${{ env.TERRAFORM_DIR }}
+#        env:
+#          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#          TF_VAR_resource_group_name: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
 #
-#      - name: Setup Helm
-#        uses: azure/setup-helm@v3
-#        with:
-#          version: 'v3.8.1'
-#
-#      - name: Corrigir e Atualizar Dependências do Helm
-#        run: |
-#          sed -i 's/name: nginx-ingress/name: ingress-nginx/g' ${{ env.HELM_CHART_DIR }}/requirements.yaml
-#          sed -i 's/version: 0.4.2/version: "4.13.2"/g' ${{ env.HELM_CHART_DIR }}/requirements.yaml
-#          sed -i 's|repository: https://helm.nginx.com/stable|repository: "https://kubernetes.github.io/ingress-nginx"|g' ${{ env.HELM_CHART_DIR }}/requirements.yaml
-#          
-#          helm dependency update ${{ env.HELM_CHART_DIR }}
-#        
-#      - name: Deploy da Aplicação com Helm
-#        run: |
-#          helm upgrade --install sock-shop ${{ env.HELM_CHART_DIR }} \
-#            --namespace sock-shop \
-#            --create-namespace \
-#            --wait
+##      - name: Terraform Apply
+##        run: terraform apply -auto-approve
+##        working-directory: ${{ env.TERRAFORM_DIR }}
+##        env:
+##          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+##          TF_VAR_resource_group_name: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
+##
+##      - name: Obter credenciais do AKS
+##        run: |
+##          az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --name ${{ env.CLUSTER_NAME }} --admin
+##          echo "Kubeconfig configurado para o cluster ${{ env.CLUSTER_NAME }}"
+##
+##      - name: Setup Helm
+##        uses: azure/setup-helm@v3
+##        with:
+##          version: 'v3.8.1'
+##
+##      - name: Corrigir e Atualizar Dependências do Helm
+##        run: |
+##          sed -i 's/name: nginx-ingress/name: ingress-nginx/g' ${{ env.HELM_CHART_DIR }}/requirements.yaml
+##          sed -i 's/version: 0.4.2/version: "4.13.2"/g' ${{ env.HELM_CHART_DIR }}/requirements.yaml
+##          sed -i 's|repository: https://helm.nginx.com/stable|repository: "https://kubernetes.github.io/ingress-nginx"|g' ${{ env.HELM_CHART_DIR }}/requirements.yaml
+##          
+##          helm dependency update ${{ env.HELM_CHART_DIR }}
+##        
+##      - name: Deploy da Aplicação com Helm
+##        run: |
+##          helm upgrade --install sock-shop ${{ env.HELM_CHART_DIR }} \
+##            --namespace sock-shop \
+##            --create-namespace \
+##            --wait

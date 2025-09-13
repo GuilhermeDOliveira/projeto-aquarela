@@ -1,13 +1,11 @@
-# Saídas da configuração do Terraform.
-
 output "cluster_name" {
   value       = azurerm_kubernetes_cluster.aks.name
   description = "O nome do cluster AKS criado."
 }
 
 output "resource_group_name" {
-  value       = "rg-desafio-guilherme"
-  description = "O nome do Grupo de Recursos."
+  value       = azurerm_resource_group.rg.name
+  description = "O nome do Grupo de Recursos onde o cluster foi criado."
 }
 
 output "kube_config" {

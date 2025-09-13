@@ -1,15 +1,14 @@
-# Exemplo de arquivo terraform.tfvars
-# Preencha com os valores desejados.
-
 resource_group_name  = "rg-desafio-guilherme"
 subscription_id = "3f9f1f1d-90dc-4d09-999b-0b680617c5f9"
 cluster_name         = "aks-desafio-aquarela"
 location             = "East US"
-
-# O Object ID do usuário do Azure AD chamado "desafio_aquarela".
-# Veja as instruções abaixo para obter este valor.
-admin_user_object_id = "f876cb0b-9abc-46c9-9468-0adcabbb9034"
-
-# Opcional: Você pode customizar o tamanho e a quantidade de nós se desejar.
+# admin_user_object_id = ""
 vm_size              = "Standard_D2s_v3"
+sku_tier            = "Free"
 system_node_count    = 2
+# min_node_count = 1
+# max_node_count = 3
+vnet_address_space   = ["10.0.0.0/16"]
+aks_subnet_address_prefix = ["10.0.1.0/24"]
+kubernetes_version   = "1.32.6"
+log_analytics_workspace_name = "log-aks-aquarela"
